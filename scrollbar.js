@@ -183,6 +183,12 @@ export class ScrollBar {
 		// console.log('track:', this.container_size.bottom, 'bar:', this.bar_size.bottom);
 	}
 
+	screenResizeUpdate = () => {
+		console.log('didt');
+		this.resetBoundingRects();
+		this.setBarSize();
+	}
+
 	barPercentOfTrack = () => {
 		return this.bar_size[this.length_side] / this.track_size[this.length_side];
 	}

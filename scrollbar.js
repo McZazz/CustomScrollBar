@@ -8,6 +8,12 @@ export class ScrollBar {
 								track_thickness='', 
 								track_styles=[], 
 								bar_styles=[], 
+								anim_styles={
+									subclass_name: '',
+									bar_normal: '',
+									bar_hover: '',
+									bar_active: ''
+								},
 								container=null,
 								scroll_cont=null, 
 								scroll_drawer=null,

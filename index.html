@@ -78,10 +78,16 @@
 			side: 'left',
 			track_thickness: '15px',
 			track_styles: [['background', '#455071']], 
-			bar_styles: [['background', '#C5D1F1']],
+			// bar_styles: [['background', '#C5D1F1']],
 			container: document.getElementById('scroll_and_scrolled_left'),
 			scroll_cont: document.getElementById('scroll_cont_left'),
-			scroll_drawer: document.getElementById('scroll_drawer_left')
+			scroll_drawer: document.getElementById('scroll_drawer_left'),
+			anim_styles: {
+				subclass_name: 'reds',
+				bar_normal: '#F1C8C8',
+				bar_hover: '#F6DBDB',
+				bar_active: '#F9EFEF'
+			}
 		});
 
 
@@ -106,10 +112,14 @@
 			side: 'bottom',
 			track_thickness: '15px',
 			track_styles: [['background', '#455071']], 
-			bar_styles: [['background', '#C5D1F1']],
 			container: document.getElementById('scroll_and_scrolled_bot'),
 			scroll_cont: document.getElementById('scroll_cont_bot'),
-			scroll_drawer: document.getElementById('scroll_drawer_bot')
+			scroll_drawer: document.getElementById('scroll_drawer_bot'),
+			anim_styles: {
+				bar_normal: '#8AA1E3',
+				bar_hover: '#A8BAED',
+				bar_active: '#BFCDF3'
+			}
 		});
 
 

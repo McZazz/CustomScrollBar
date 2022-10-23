@@ -26,11 +26,10 @@ export const setPermStyles = (element/*Node*/, styles/*[['backgroundColor', '#33
 }
 
 
-export const setAnimStyles = (element/*Node*/, styles/*'#stuff:hover {background-color: red;}'*/) => {
+export const setAnimStyles = (class_name/*String*/, styles/*'#stuff:hover {background-color: red;}'*/) => {
 
-	let id = element.id;
 	let result = document.createElement('style');
-	result.id = `style_${id}`;
+	result.classList = class_name;
 
 	result.textContent = styles;
 

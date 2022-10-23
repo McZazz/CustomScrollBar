@@ -40,6 +40,40 @@ export class ScrollBar {
 			this.drag_dir = 'x';
 		}
 
+		this.bar_classname = '';
+
+		// for hover / active background colors
+		if (anim_styles.bar_normal !== '' || anim_styles.bar_hover !== '' || anim_styles.bar_active !== '') {
+
+			let classname = 'scrollbar';
+			let styles = '';
+
+			if (anim_styles.subclass_name !== '') {
+				classname = `scrollbar_${anim_styles.subclass_name}`;
+			}
+
+			if (anim_styles.bar_normal !== '') {
+				styles += `.${classname} {` +
+											`background: ${anim_styles.bar_normal};` +
+									`}`;
+			}
+			if (anim_styles.bar_hover !== '') {
+				styles += `.${classname}:hover {` +
+											`background: ${anim_styles.bar_hover};` +
+									`}`;
+			}
+			if (anim_styles.bar_active !== '') {
+				styles += `.${classname}:active {` +
+											`background: ${anim_styles.bar_active};` +
+									`}`;
+			}
+			
+			this.bar_classname = classname;
+
+			setAnimStyles(classname, styles);
+		}
+
+
 		this.side = side;
 
 		this.scrollcont_at_start = null;
@@ -136,6 +170,10 @@ export class ScrollBar {
 
 		track.appendChild(bar);
 		this.cont = this.track;
+
+		if (this.bar_classname !== '') {
+			this.bar.classList = this.bar_classname;
+		}
 
 		// set sizes and append
 		this.resetBoundingRects();

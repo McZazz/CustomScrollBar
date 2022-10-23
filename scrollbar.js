@@ -150,7 +150,7 @@ export class ScrollBar {
 		}
 
 		// let click_x = event.clientX;
-		// let click_y = event.clientY;  asddfasdf a
+		// let click_y = event.clientY;
 		let bar_pos = this.bar_pos;
 		let bar_height = this.bar_size.height;
 

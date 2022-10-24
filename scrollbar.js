@@ -24,7 +24,7 @@ export class ScrollBar {
 		this.global_drag_listener = global_drag_listener;
 		this.id = id;
 
-
+		this.init_now = true;
 
 		this.is_vertical = null;
 		this.length_side = null;
@@ -264,19 +264,19 @@ export class ScrollBar {
 		let bar_pos = this.bar_pos;
 		let bar_height = this.bar_size.height;
 
-		let clicked_before = (click[this.drag_dir] - this.container_size[this.bar_pos_side]) - this.bar_pos < 0;
+		let clicked_before = (click[this.drag_dir] - this.track_size[this.bar_pos_side]) - this.bar_pos < 0;
 
 		let new_bar_pos = -1;
 
 		if (clicked_before) {
-			new_bar_pos = click[this.drag_dir] - this.container_size[this.bar_pos_side] - this.track_click_bar_move_overshoot;
+			new_bar_pos = click[this.drag_dir] - this.track_size[this.bar_pos_side] - this.track_click_bar_move_overshoot;
 			if (new_bar_pos < 0 || new_bar_pos <= this.track_click_bar_move_overshoot * 1.8) {
 				new_bar_pos = 0;
 			}
 		} else {
-			new_bar_pos = click[this.drag_dir] - this.container_size[this.bar_pos_side] + this.track_click_bar_move_overshoot;
-			if (new_bar_pos > this.container_size[this.length_side] || new_bar_pos >= this.container_size[this.length_side] - (this.track_click_bar_move_overshoot * 1.8)) {
-				new_bar_pos = this.container_size[this.length_side];
+			new_bar_pos = click[this.drag_dir] - this.track_size[this.bar_pos_side] + this.track_click_bar_move_overshoot;
+			if (new_bar_pos > this.track_size[this.length_side] || new_bar_pos >= this.track_size[this.length_side] - (this.track_click_bar_move_overshoot * 1.8)) {
+				new_bar_pos = this.track_size[this.length_side];
 			}
 			new_bar_pos = new_bar_pos - this.bar_size[this.length_side];
 		}
@@ -375,7 +375,7 @@ export class ScrollBar {
 
 
 	getStartOverflow = () => {
-		console.log('start overflow',this.scrolldrawer_size[this.drag_dir], this.container_size[this.drag_dir]);
+		return this.scrolldrawer_size[this.drag_dir], this.container_size[this.drag_dir];
 	}
 
 	getStopOverflow = () => {
@@ -411,7 +411,12 @@ export class ScrollBar {
 			} 
 
 			let percent = this.container_size[this.length_side] / this.scrolldrawer_size[this.length_side];
-			let bar_length = this.container_size[this.length_side] * percent;
+			if (this.init_now) {
+				console.log('init now');
+				this.forceBarPosWithPercent(0);
+				this.init_now = false;
+			}
+			let bar_length = this.track_size[this.length_side] * percent;
 
 			// ensure it doesn't get tiny
 			bar_length = this.ensureBarNotTiny(bar_length);

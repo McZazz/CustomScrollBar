@@ -1,13 +1,11 @@
 export class GlobalDragListener {
 	constructor() {
-		this.drag_target = null;
 		this.id = 'global_drag_listener';
-		this.cntr = 0;
 
+		this.drag_target = null;
 		this.moved = false;
-	
 		this.pos = {x:0,y:0}; // window event listener mosuemove, clientX and clientY === entire screen mousemove for drags
-		this.dragging = 0; // 0=false, 1=true, 2=mouseup
+		this.dragging = false; 
 
 		window.addEventListener('mousemove', (event) => { // putting on window allows dragging outside if left click is held!!!
 			event.preventDefault();
@@ -16,7 +14,6 @@ export class GlobalDragListener {
 
 				this.moved = true;
 				this.dragging = true;
-				this.cntr++;
 
 				let new_x = event.clientX;
 				let new_y = event.clientY;
@@ -44,13 +41,15 @@ export class GlobalDragListener {
 			// event.preventDefault();
 
 			if (this.drag_target) {
-				this.cntr++;
 			
 				this.dragging = false;
 
 				this.transmitEvent();
-				this.unsetDragging();
+
+				// reset properties
 				this.moved = false;
+				this.drag_target = null;
+				this.pos = {x:0,y:0};
 			}
 		});
 
@@ -60,19 +59,17 @@ export class GlobalDragListener {
 		this.drag_target = drag_target;
 	}
 
-	unsetDragging = () => {
-		this.drag_target = null;
-	}
-
 	transmitEvent = () => {
 		let pos = this.pos;
 		let dragging = this.dragging;
+		let moved = this.moved;
 
 		const data = {
 			pos: pos,
 			dragging: dragging,
+			moved: moved
 		};
 
-		this.drag_target.receiveDragEvent(data, this.moved);
+		this.drag_target.receiveDragEvent(data);
 	}
 }

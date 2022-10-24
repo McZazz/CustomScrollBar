@@ -63,7 +63,6 @@
 
 	</div>
 
-
 	<script type="module">
 		import { ScrollBar } from './scrollbar.js';
 		import { GlobalDragListener } from './global_drag_listener.js';
@@ -71,6 +70,7 @@
 
 		const global_drag = new GlobalDragListener();
 		const global_resize = new GlobalScreenResizeUpdater();
+
 
 		// ----- left side scroll bar
 		const left_scroll = new ScrollBar({
@@ -140,15 +140,6 @@
 		});
 		global_resize.addToUpdater(top_scroll);
 
-
-		// document.body.appendChild(scroll.cont);
-		// Scrollbar {
-	// constructor({id='', track_styles=[], bar_styles=[], scroll_cont=null, scroll_drawer=null}={}) 
-
-
-		// document.getElementById('scroll_and_scrolled_left');
-		// document.getElementById('scroll_and_scrolled_top');
-		// document.getElementById('scroll_and_scrolled_bot');
 	</script>
 </body>
 </html>

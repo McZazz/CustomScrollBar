@@ -79,7 +79,6 @@ export class ScrollBar {
 			setAnimStyles(classname, styles);
 		}
 
-
 		this.side = side;
 
 		this.scrollcont_at_start = null;
@@ -102,10 +101,6 @@ export class ScrollBar {
 		this.disable_wheel = disable_wheel;
 		this.wheel_mult = 20;
 		this.track_click_bar_move_overshoot = 5;
-
-		// this.getStartOverflow();
-		// this.getStopOverflow();
-		// console.log(this.getStartOverflow(), this.getStopOverflow());
 
 		this.x = null;
 		this.y = null;
@@ -143,9 +138,7 @@ export class ScrollBar {
 		});
 
 		this.container.addEventListener('wheel', (event) => {
-			// this.first_click_x = event.clientX;
-			// this.first_click_y = event.clientY;
-			// this.global_drag_listener.setDragging(this);
+
 			if (!this.disable_wheel) {
 				this.resetBoundingRects();
 
@@ -191,22 +184,15 @@ export class ScrollBar {
 	}
 
 	screenResizeUpdate = () => {
-		// if (!this.bar_pos) {
-		// 	this.bar_pos = 0;
-		// }
-		// console.log('bar_pos inside', this.bar_pos);
 
 		let start_scrollarea_loc_percent = this.bar_pos / this.getEmptyTracklength();
 		this.resetBoundingRects();
 		// percent is "the way down" for the bar, and "the way up" for drawer
-		// console.log('didt',curr_scrollarea_loc_percent);
 
 		this.setBarSize();
 		this.resetBoundingRects();
 
 		this.forceBarPosWithPercent(start_scrollarea_loc_percent);
-
-		// console.log('bar_pos', this.bar_pos);
 
 	}
 
@@ -228,10 +214,6 @@ export class ScrollBar {
 
 		let travelable_area = this.track_size[this.length_side] - this.bar_size[this.length_side];
 		let new_bar_pos = travelable_area * percent;
-
-		// if (new_bar_pos > travelable_area) {
-		// 	new_bar_pos = travelable_area;
-		// }
 
 		// once number gets tiny, the next step delivers NaN if we don't adjust it first
 		if (!new_bar_pos || new_bar_pos < 0) {
@@ -259,8 +241,6 @@ export class ScrollBar {
 			y: event.clientY
 		}
 
-		// let click_x = event.clientX;
-		// let click_y = event.clientY;
 		let bar_pos = this.bar_pos;
 		let bar_height = this.bar_size.height;
 
@@ -355,10 +335,10 @@ export class ScrollBar {
 		this.setScrolledAreaFromBar();
 	}
 
-	receiveDragEvent = (event, was_moved) => {
+	receiveDragEvent = (event) => {
 		this.resetBoundingRects();
 
-		if (was_moved) {
+		if (event.moved) {
 			let amt = this.firstClickAndCurrMouseDiff(event);
 		
 			// correct for the dir we are using here
@@ -372,9 +352,9 @@ export class ScrollBar {
 
 		}
 
-		if (event.dragging === false) {
-			console.log('move is doneeee');
-		}
+		// if (event.dragging === false) {
+		// 	console.log('move is doneeee');
+		// }
 	}
 
 
@@ -438,12 +418,6 @@ export class ScrollBar {
 			}
 		}
 	}
-
-	// placeDrawer = (loc/*num*/) => {
-
-	// 	this.drawer_loc = loc;
-	// 	this.scroll_drawer.style[this.bar_pos_side] = `${loc}px`;
-	// }
 
 	hideBar = () => {
 		if (this.scroll_hides) {

@@ -371,6 +371,10 @@ export class ScrollBar {
 			this.moveBar(amt, event.dragging);
 
 		}
+
+		if (event.dragging === false) {
+			console.log('move is doneeee');
+		}
 	}
 
 

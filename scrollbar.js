@@ -389,6 +389,7 @@ export class ScrollBar {
 			} else {
 				this.container.appendChild(this.track);
 			}
+			this.forceBarPosWithPercent(0);
 		}
 	}
 
@@ -412,7 +413,7 @@ export class ScrollBar {
 
 			let percent = this.container_size[this.length_side] / this.scrolldrawer_size[this.length_side];
 			if (this.init_now) {
-				console.log('init now');
+				// console.log('init now');
 				this.forceBarPosWithPercent(0);
 				this.init_now = false;
 			}

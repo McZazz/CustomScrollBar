@@ -24,18 +24,23 @@ export class ScrollBar {
 		this.global_drag_listener = global_drag_listener;
 		this.id = id;
 
+
+
 		this.is_vertical = null;
 		this.length_side = null;
 		this.bar_pos_side = null;
 		this.drag_dir = null;
+		this.width_side = null;
 		if (side === 'left' || side === 'right') {
 			this.is_vertical = true;
 			this.length_side = 'height';
+			this.width_side = 'width';
 			this.bar_pos_side = 'top';
 			this.drag_dir = 'y';
 		} else {
 			this.is_vertical = false;
 			this.length_side = 'width';
+			this.width_side = 'height';
 			this.bar_pos_side = 'left';
 			this.drag_dir = 'x';
 		}
@@ -87,6 +92,7 @@ export class ScrollBar {
 
 		this.track_thickness = track_thickness;
 		this.container = container; // container for this scrollbar and the below scroll_cont
+
 		this.scroll_cont = scroll_cont;
 		this.scroll_drawer = scroll_drawer;
 		// this.getTrackLength(this.container);
@@ -157,6 +163,7 @@ export class ScrollBar {
 	    	amt *= this.wheel_mult * bar_percent;
 
 	    	this.moveBar(amt, false);
+
 	    	// this.setScrolledAreaFromBar();
 			}
 		});
@@ -184,10 +191,54 @@ export class ScrollBar {
 	}
 
 	screenResizeUpdate = () => {
-		console.log('didt');
+		if (!this.bar_pos) {
+			this.bar_pos = 0;
+		}
+		let start_scrollarea_loc_percent = this.bar_pos / this.getEmptyTracklength();
 		this.resetBoundingRects();
+		// percent is "the way down" for the bar, and "the way up" for drawer
+		// console.log('didt',curr_scrollarea_loc_percent);
+
 		this.setBarSize();
+		this.resetBoundingRects();
+
+		this.forceBarPosWithPercent(start_scrollarea_loc_percent);
+
 	}
+
+	roundToTwo = (num) => {
+		return Number.parseInt(num * 100) / 100;
+	}	
+
+	forceContainerNotSmall = () => {
+		this.resetBoundingRects();
+		if (this.container_size[this.length_side] < this.bar_size[this.width_side] * 2) {
+			this.container.style.minHeight = `${this.bar_size[this.width_side] * 2}px`;
+		}
+	}
+
+	forceBarPosWithPercent = (percent) => {
+		if (percent > 1) {
+			percent = 1;
+		}
+
+		let travelable_area = this.track_size[this.length_side] - this.bar_size[this.length_side];
+		let new_bar_pos = travelable_area * percent;
+
+		// if (new_bar_pos > travelable_area) {
+		// 	new_bar_pos = travelable_area;
+		// }
+
+		// console.log('percent',percent);
+
+		this.bar_pos = new_bar_pos;
+		this.bar.style[this.bar_pos_side] = `${this.roundToTwo(this.bar_pos)}px`;
+
+		this.setScrolledAreaFromBar();
+		this.forceContainerNotSmall();
+		// console.log('did it',new_bar_pos);
+	}
+
 
 	barPercentOfTrack = () => {
 		return this.bar_size[this.length_side] / this.track_size[this.length_side];
@@ -223,7 +274,7 @@ export class ScrollBar {
 		}
 
 		this.bar_pos = new_bar_pos;
-		this.bar.style[this.bar_pos_side] = `${this.bar_pos}px`;
+		this.bar.style[this.bar_pos_side] = `${this.roundToTwo(this.bar_pos)}px`;
 		this.setScrolledAreaFromBar();
 
 	}
@@ -257,7 +308,7 @@ export class ScrollBar {
 
 		let new_scrolledarea_pos = scrollAreaMaxMovableLen - (scrollAreaMaxMovableLen * barPosPercentOfMovableArea);
 		// console.log(new_scrolledarea_pos);
-		this.scroll_drawer.style[this.bar_pos_side] = `-${new_scrolledarea_pos}px`;
+		this.scroll_drawer.style[this.bar_pos_side] = `-${this.roundToTwo(new_scrolledarea_pos)}px`;
 	}
 
 	resetBoundingRects = () => {
@@ -286,7 +337,7 @@ export class ScrollBar {
 		else if (new_pos > empty_track_len) {
 			new_pos = empty_track_len;
 		}
-		this.bar.style[this.bar_pos_side] = `${new_pos}px`;
+		this.bar.style[this.bar_pos_side] = `${this.roundToTwo(new_pos)}px`;
 
 		if (move_is_done === false) {
 			this.bar_pos = new_pos;
@@ -313,16 +364,9 @@ export class ScrollBar {
 		}
 	}
 
-	getTrackLength = () => {
-		if (this.is_vertical) {
-			return this.container_size.height;
-		} else {
-			return this.container_size.width;
-		}
-	}
 
 	getStartOverflow = () => {
-		return this.drawer_loc;
+		console.log('start overflow',this.scrolldrawer_size[this.drag_dir], this.container_size[this.drag_dir]);
 	}
 
 	getStopOverflow = () => {
@@ -339,6 +383,14 @@ export class ScrollBar {
 		}
 	}
 
+	ensureBarNotTiny = (bar_length) => {
+		if (bar_length < this.bar_size[this.width_side] * 2) {
+			bar_length = this.bar_size[this.width_side] * 2;
+		}
+
+		return bar_length;
+	}
+
 	setBarSize = () => {
 
 		if (this.scrolldrawer_size[this.length_side] > this.container_size[this.length_side]) {
@@ -351,7 +403,12 @@ export class ScrollBar {
 
 			let percent = this.container_size[this.length_side] / this.scrolldrawer_size[this.length_side];
 			let bar_length = this.container_size[this.length_side] * percent;
-			this.bar.style[this.length_side] = `${bar_length}px`;
+
+			// ensure it doesn't get tiny
+			console.log('it should tiny');
+			bar_length = this.ensureBarNotTiny(bar_length);
+
+			this.bar.style[this.length_side] = `${this.roundToTwo(bar_length)}px`;
 		} else {
 			if (this.container.contains(this.track)) {
 				this.hideBar();

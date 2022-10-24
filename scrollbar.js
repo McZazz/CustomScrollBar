@@ -191,9 +191,11 @@ export class ScrollBar {
 	}
 
 	screenResizeUpdate = () => {
-		if (!this.bar_pos) {
-			this.bar_pos = 0;
-		}
+		// if (!this.bar_pos) {
+		// 	this.bar_pos = 0;
+		// }
+		// console.log('bar_pos inside', this.bar_pos);
+
 		let start_scrollarea_loc_percent = this.bar_pos / this.getEmptyTracklength();
 		this.resetBoundingRects();
 		// percent is "the way down" for the bar, and "the way up" for drawer
@@ -203,6 +205,8 @@ export class ScrollBar {
 		this.resetBoundingRects();
 
 		this.forceBarPosWithPercent(start_scrollarea_loc_percent);
+
+		// console.log('bar_pos', this.bar_pos);
 
 	}
 
@@ -229,7 +233,10 @@ export class ScrollBar {
 		// 	new_bar_pos = travelable_area;
 		// }
 
-		// console.log('percent',percent);
+		// once number gets tiny, the next step delivers NaN if we don't adjust it first
+		if (!new_bar_pos || new_bar_pos < 0) {
+			new_bar_pos = 0;
+		}
 
 		this.bar_pos = new_bar_pos;
 		this.bar.style[this.bar_pos_side] = `${this.roundToTwo(this.bar_pos)}px`;
@@ -237,6 +244,7 @@ export class ScrollBar {
 		this.setScrolledAreaFromBar();
 		this.forceContainerNotSmall();
 		// console.log('did it',new_bar_pos);
+
 	}
 
 
@@ -324,6 +332,7 @@ export class ScrollBar {
 	}
 
 	moveBar = (amt, move_is_done) => {
+
 		let new_pos = this.bar_pos + amt;
 		let empty_track_len = this.getEmptyTracklength();
 

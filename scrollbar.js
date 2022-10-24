@@ -201,9 +201,10 @@ export class ScrollBar {
 		track.appendChild(bar);
 		this.cont = this.track;
 
-		if (this.bar_classname !== '') {
-			this.bar.classList = this.bar_classname;
-		}
+		// if (this.bar_classname !== '') {
+		// 	this.bar.classList = this.bar_classname;
+		// }
+
 
 		// set sizes and append
 		this.resetBoundingRects();
@@ -231,9 +232,19 @@ export class ScrollBar {
 
 	forceContainerNotSmall = () => {
 		this.resetBoundingRects();
-		if (this.container_size[this.length_side] < this.bar_size[this.width_side] * 2) {
-			this.container.style.minHeight = `${this.bar_size[this.width_side] * 2}px`;
+
+		if (this.length_side === 'height') {
+			if (this.container_size[this.length_side] < this.bar_size[this.width_side] * 2) {
+				// console.log('high smoosh');
+				this.container.style.minHeight = `${this.bar_size[this.width_side] * 2}px`;
+			}
+		} else {
+			if (this.container_size[this.length_side] < this.bar_size[this.length_side]) {
+				// console.log('wide smoosh');
+				this.container.style.minWidth = `${this.bar_size[this.length_side]}px`;
+			}
 		}
+
 	}
 
 	forceBarPosWithPercent = (percent) => {

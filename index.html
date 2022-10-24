@@ -8,10 +8,10 @@
 </head>
 <body style="display:flex; flex-direction:column; align-items:center; width:100%; height:100vh; padding-top:50px; background:#616474">
 
-	<div style="width:1920px; height:100%; display:flex; justify-content:space-around;">
+	<div style="width:100%; height:100%; display:flex; justify-content:space-around;">
 		<!-- scroll_cont can be anywhere in the document in relation to the actual scrollbar -->
 
-		<div id="scroll_and_scrolled_left" style="display:flex; width:200px; height:60%; background:#619358;">
+		<div id="scroll_and_scrolled_left" style="display:flex; width:200px; height:60%; background:#619358; margin-left:10px; margin-right:5px;">
 
 			<div id="scroll_cont_left" style="position:relative; height:100%; width:100%; display:flex; overflow:hidden;">
 				<div id="scroll_drawer_left" style="position:absolute; width:100%; height:600px; background:#A3E398; display:flex; flex-direction:column; justify-content:space-between;">
@@ -24,7 +24,7 @@
 
 
 
- 		<div id="scroll_and_scrolled_right" style="display:flex; width:200px; height:300px; background:#619358;">
+ 		<div id="scroll_and_scrolled_right" style="display:flex; width:200px; height:300px; background:#619358; margin-left:5px; margin-right:5px;">
 
 			<div id="scroll_cont_right" style="position:relative; height:100%; width:100%; display:flex; overflow:hidden;">
 				<div id="scroll_drawer_right" style="position:absolute; width:100%; height:2000px; background:#A3E398; display:flex; flex-direction:column; justify-content:space-between;">
@@ -37,7 +37,7 @@
 
 
 
-		<div id="scroll_and_scrolled_bot" style="display:flex; flex-direction:column; width:505px; height:200px; background:#619358;">
+		<div id="scroll_and_scrolled_bot" style="display:flex; flex-direction:column; width:505px; height:200px; background:#619358; margin-left:5px; margin-right:5px;">
 
 			<div id="scroll_cont_bot" style="position:relative; height:100%; width:100%; display:flex; overflow:hidden;">
 				<div id="scroll_drawer_bot" style="position:absolute; height:100%; width:700px; background:#A3E398; display:flex; justify-content:space-between;">
@@ -50,7 +50,7 @@
 
 
 
-		<div id="scroll_and_scrolled_top" style="display:flex; flex-direction:column; width:505px; height:200px; background:#619358;">
+		<div id="scroll_and_scrolled_top" style="display:flex; flex-direction:column; width:505px; height:200px; background:#619358; margin-left:5px; margin-right:10px;">
 
 			<div id="scroll_cont_top" style="position:relative; height:100%; width:100%; display:flex; overflow:hidden;">
 				<div id="scroll_drawer_top" style="position:absolute; height:100%; width:515px; background:#A3E398; display:flex; justify-content:space-between;">
@@ -122,6 +122,7 @@
 				bar_active: '#BFCDF3'
 			}
 		});
+		global_resize.addToUpdater(bot_scroll);
 
 
 		// ----- top side scroll bar
@@ -137,6 +138,7 @@
 			scroll_cont: document.getElementById('scroll_cont_top'),
 			scroll_drawer: document.getElementById('scroll_drawer_top')
 		});
+		global_resize.addToUpdater(top_scroll);
 
 
 		// document.body.appendChild(scroll.cont);

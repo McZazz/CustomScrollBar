@@ -45,39 +45,8 @@ export class ScrollBar {
 			this.drag_dir = 'x';
 		}
 
-		this.bar_classname = '';
 
-		// for hover / active background colors
-		if ((anim_styles.bar_normal !== undefined && anim_styles.bar_normal !== '') || 
-			(anim_styles.bar_hover !== undefined && anim_styles.bar_hover !== '') || 
-			(anim_styles.bar_active !== undefined && anim_styles.bar_active !== '')) {
 
-			let classname = 'scrollbar';
-			let styles = '';
-
-			if (anim_styles.subclass_name !== undefined && anim_styles.subclass_name !== '') {
-				classname = `scrollbar_${anim_styles.subclass_name}`;
-			}
-
-			if (anim_styles.bar_normal !== undefined && anim_styles.bar_normal !== '') {
-				styles += `.${classname} {` +
-											`background: ${anim_styles.bar_normal};` +
-									`}`;
-			}
-			if (anim_styles.bar_hover !== undefined && anim_styles.bar_hover !== '') {
-				styles += ` .${classname}:hover {` +
-											`background: ${anim_styles.bar_hover};` +
-									`}`;
-			}
-			if (anim_styles.bar_active !== undefined && anim_styles.bar_active !== '') {
-				styles += ` .${classname}:active {` +
-											`background: ${anim_styles.bar_active};` +
-									`}`;
-			}
-			
-			this.bar_classname = classname;
-			setAnimStyles(classname, styles);
-		}
 
 		this.side = side;
 
@@ -105,6 +74,9 @@ export class ScrollBar {
 		this.x = null;
 		this.y = null;
 
+		this.bar_is_hovering = false;
+		this.bar_is_active = false;
+
 		// these are added at the end of the param arrays by similar name
 		if (this.is_vertical === true) {
 			track_styles = track_styles.concat([['position', 'relative'], ['height', '100%'], ['width', track_thickness]]);
@@ -126,11 +98,64 @@ export class ScrollBar {
 		bar.setAttribute('_parent_obj', this.id);
 		this.bar = bar;
 
+		// for hover / active background colors
+
+		this.bar_classname = 'scrollbar';
+		this.bar_normal = null;
+		this.bar_hover = null;
+		this.bar_active = null;
+
+		if (anim_styles !== undefined) {
+
+			if (anim_styles.subclass_name !== undefined && anim_styles.subclass_name !== '') {
+				this.bar_classname += `_${anim_styles.subclass_name}`;
+			}
+
+			if (anim_styles.bar_normal !== undefined && anim_styles.bar_normal !== '') {
+				this.bar_normal = anim_styles.bar_normal;
+				this.bar.style.backgroundColor = this.bar_normal;
+			}
+
+			if (anim_styles.bar_hover !== undefined && anim_styles.bar_hover !== '') {
+				this.bar_hover = anim_styles.bar_hover;
+			}
+
+			if (anim_styles.bar_active !== undefined && anim_styles.bar_active !== '') {
+				this.bar_active = anim_styles.bar_active;
+			}
+
+		}
+
 
 		//------------ Listeners
 
+		// hover
+		if (this.bar_hover !== null) {
+			this.bar.addEventListener('mouseenter', (event) => {
+				this.bar_is_hovering = true;
+				this.bar.style.backgroundColor = this.bar_hover;
+			});
+
+			this.bar.addEventListener('mouseleave', (event) => {
+
+				this.bar_is_hovering = false;
+
+				if (!this.bar_is_active) {
+					this.bar.style.backgroundColor = this.bar_normal;
+				}
+			});
+		}
+
+
 		this.bar.addEventListener('mousedown', (event) => {
 			event.preventDefault();
+
+			this.bar_is_active = true;
+
+			// managing :active color here due to need of preventDefault above to prevent cross element / event pollution 
+			if (this.bar_active !== null) {
+				this.bar.style.backgroundColor = this.bar_active;
+			}
 
 			this.x = event.clientX;
 			this.y = event.clientY;
@@ -356,9 +381,25 @@ export class ScrollBar {
 
 		}
 
-		// if (event.dragging === false) {
-		// 	console.log('move is doneeee');
-		// }
+		if (event.dragging === false) {
+
+			this.bar_is_active = false;
+
+			// managing :active color here due to need of preventDefault above to prevent cross element / event pollution 
+			if (this.bar_active !== null) {
+				if (this.bar_is_hovering === false) {
+					this.bar.style.backgroundColor = this.bar_normal;
+				} else {
+
+					if (this.bar_is_hovering) {
+					this.bar.style.backgroundColor = this.bar_hover;
+
+					} else {
+						this.bar.style.backgroundColor = this.bar_normal;
+					}
+				}
+			}
+		}
 	}
 
 

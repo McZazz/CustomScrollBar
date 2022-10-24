@@ -29,20 +29,9 @@ export class GlobalDragListener {
 			}
 		});
 
-		// window.addEventListener('mousedown', (event) => {
-		// 	// event.stopPropagation();
-			// console.log(event.target.getAttribute('_parent_obj'));
-
-
-		// 	// this is needed to prevent cross-element polution that happens when doing mouseup over elements other than
-		// 	// the ones originally clicked, or on other computer screens.
-		// 	// DOM would treat other elements in this situation like some combo of an img (dragging ghosted images of divs) and would polute
-		// 	// position data and cause erratic drag behavior of draggable items.
-		// });
-
 		window.addEventListener('mouseup', (event) => {
 			// console.log(event.target.getAttribute('_parent_obj'));
-			console.log(event.target);
+			// console.log(event.target);
 
 			event.preventDefault();
 

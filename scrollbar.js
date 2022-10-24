@@ -405,7 +405,6 @@ export class ScrollBar {
 			let bar_length = this.container_size[this.length_side] * percent;
 
 			// ensure it doesn't get tiny
-			console.log('it should tiny');
 			bar_length = this.ensureBarNotTiny(bar_length);
 
 			this.bar.style[this.length_side] = `${this.roundToTwo(bar_length)}px`;

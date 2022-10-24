@@ -4,7 +4,6 @@ export class GlobalScreenResizeUpdater {
 		this.update_set = new Set();
 
 		window.addEventListener('resize', (event) => {
-			console.log('resized');
 			this.update();
 		});
 	}

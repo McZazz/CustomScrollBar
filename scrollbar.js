@@ -65,12 +65,12 @@ export class ScrollBar {
 									`}`;
 			}
 			if (anim_styles.bar_hover !== undefined && anim_styles.bar_hover !== '') {
-				styles += `.${classname}:hover {` +
+				styles += ` .${classname}:hover {` +
 											`background: ${anim_styles.bar_hover};` +
 									`}`;
 			}
 			if (anim_styles.bar_active !== undefined && anim_styles.bar_active !== '') {
-				styles += `.${classname}:active {` +
+				styles += ` .${classname}:active {` +
 											`background: ${anim_styles.bar_active};` +
 									`}`;
 			}
@@ -123,19 +123,23 @@ export class ScrollBar {
 
 		// create bar element
 		let bar = makeElement({type:'div', styles:this.bar_styles});
+		bar.setAttribute('_parent_obj', this.id);
 		this.bar = bar;
 
 
 		//------------ Listeners
 
 		this.bar.addEventListener('mousedown', (event) => {
+			event.preventDefault();
 
 			this.x = event.clientX;
 			this.y = event.clientY;
 
 			// console.log('init click xy',this.x,this.y);
 			this.global_drag_listener.setDragging(this);
+
 		});
+
 
 		this.container.addEventListener('wheel', (event) => {
 

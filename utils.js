@@ -38,33 +38,31 @@ export const setAnimStyles = (class_name/*String*/, styles/*'#stuff:hover {backg
 
 
 export class RandIdManager {
-	constructor() {
+	constructor(id_len) {
+		this.id_len = id_len;
 		this.existing_ids = new Set();
 	}
 
-	createId = (id_type, id_len) => {
+	createId = ({id_type=''/*String*/}={}) => {
 	  let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789012345678901234567890123456789012345678901';
-	  let result = `${id_type}_`;
+	  let result = id_type;
 	  let cntr = 0;
 
 	  while (true) {
-	    for (let i=0; i<id_len; i++) {
+	    for (let i=0; i<this.id_len; i++) {
 	      result += chars.charAt(Math.floor(Math.random() * chars.length));
 	    }
 
-	    let isUnique = true;
       if (this.existing_ids.has(result)) {
-        isUnique = false;
         cntr++;
+      } else {
+      	this.existing_ids.add(result);
+      	return result;
       }
 
-	    if (isUnique == true) {
-	      break;
-	    }
 	    if (cntr >= 10) {
-	    	return 'make_id_len_longer';
+	    	this.id_len++;
 	    }
 	  }
-	  return result;
 	}
 }
